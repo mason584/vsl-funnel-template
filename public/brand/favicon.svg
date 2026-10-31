@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    Favicon de marque. C'est un fichier à remplacer, pas un composant :
+    aucune couleur n'est lue depuis tokens.css ici, un favicon étant servi
+    comme une image statique, hors de toute feuille de style.
+    Valeurs actuelles : fond crème et accent Savoire.
+  -->
+  <rect width="64" height="64" rx="14" fill="#FEFAEB"/>
+  <path d="M32 13 L48 51 L32 43 L16 51 Z" fill="#E35A2E"/>
+</svg>

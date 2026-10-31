@@ -1,0 +1,49 @@
+{
+  "name": "vsl-funnel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "tsx scripts/check-brand.ts && next build",
+    "vercel-build": "tsx scripts/migrate.ts && tsx scripts/check-brand.ts && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "preview:setup": "tsx src/db/seed-preview.ts",
+    "preview:db": "tsx scripts/preview-db.ts",
+    "preview:web": "PREVIEW_MODE=true next dev",
+    "preview": "concurrently -k -n db,web -c blue,green \"pnpm preview:db\" \"pnpm preview:web\"",
+    "check": "tsx scripts/check-content.ts && tsx scripts/check-brand.ts",
+    "check:brand": "tsx scripts/check-brand.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "drizzle-orm": "^0.45.2",
+    "lucide-react": "^0.560.0",
+    "motion": "^13.2.0",
+    "next": "16.2.12",
+    "postgres": "^3.4.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.4",
+    "@electric-sql/pglite-socket": "^0.2.7",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "concurrently": "^10.0.4",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.12",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.4",
+    "typescript": "^5"
+  }
+}

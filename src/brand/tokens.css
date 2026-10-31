@@ -1,0 +1,97 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * LA MARQUE — le seul fichier de couleurs et de polices de toute l'app.
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Aucun composant n'écrit une teinte en dur : tout passe par ces variables.
+ * Pour rebrander le tunnel, il suffit de remplacer les valeurs ci-dessous
+ * (et les fichiers de `public/brand/`), sans toucher une ligne de composant.
+ *
+ * Les noms sont des RÔLES, pas des couleurs : `--accent` et non `--orange`.
+ * Un client dont la couleur d'action est bleue ne doit pas se retrouver avec
+ * une variable qui s'appelle « orange ».
+ *
+ * Valeurs actuelles : charte Savoire — crème unique, pas de mode sombre.
+ */
+
+/* ── Polices ────────────────────────────────────────────────────────────────
+ * Aucune police n'est auto-hébergée par défaut (exemple commenté plus bas).
+ * Les polices Google sont déclarées dans brand.ts (`fonts`) et chargées par
+ * le composant DefaultFonts — pas par un @import ici, qui finirait au milieu
+ * de la feuille compilée et serait ignoré par le navigateur.
+ * Pour changer : déposer les fichiers dans public/brand/fonts, ajuster les
+ * @font-face, puis les trois variables --font-* et `fonts` dans brand.ts.
+ */
+/* Exemple de police auto-hébergée — déposer les fichiers dans
+ * public/brand/fonts, décommenter, puis pointer --font-display dessus et
+ * passer `google` à null pour cette police dans brand.ts.
+ *
+ * @font-face {
+ *   font-family: 'Ma Police';
+ *   src: url('/brand/fonts/ma-police-regular.woff2') format('woff2');
+ *   font-weight: 400;
+ *   font-display: swap;
+ * }
+ */
+
+:root {
+  /* ── Fonds et surfaces ── */
+  --bg: #FEFAEB;           /* fond général de l'app */
+  --bg-deep: #E9E4D8;      /* fond hors app, pieds de page */
+  --panel: #FFFFFF;        /* cartes, panneaux surélevés */
+  --panel-accent: #F7F0DC; /* panneaux d'accent, survols */
+
+  /* ── Texte ── */
+  --text: #221F1B;         /* texte principal */
+  --text-strong: #221F1B;  /* titres */
+  --text-secondary: #5A5248;
+  --text-muted: #8A7E6E;
+  --text-on-accent: #FEFAEB; /* texte posé sur --accent */
+  --text-on-inverse: #FEFAEB; /* texte posé sur --inverse */
+
+  /* ── Action ── */
+  --accent: #E35A2E;
+  --accent-deep: #C24820;  /* survol, erreurs */
+  --accent-soft: rgba(227, 90, 46, 0.14);
+  --inverse: #221F1B;      /* boutons sombres, barre latérale admin */
+  --inverse-soft: #3A352F;
+
+  /* ── Sémantique ── */
+  --ok: #3E7A52;
+  --ok-soft: rgba(62, 122, 82, 0.12);
+  --warn-bg: #E8D4B8;
+  --warn-text: #6F4E3C;
+  --link: #926850;
+  --tan: #DBC3A6;          /* traits décoratifs, numéros */
+
+  /* ── Traits et ombres ── */
+  --border-soft: rgba(34, 31, 27, 0.08);
+  --border-strong: rgba(34, 31, 27, 0.14);
+  --border-input: rgba(34, 31, 27, 0.28);
+  /* Les ombres sont teintées de l'encre, jamais d'un noir pur : sur une
+     charte sombre, un noir pur disparaît ou salit. */
+  --shadow-soft: 0 2px 8px rgba(34, 31, 27, 0.06);
+  --shadow-strong: 0 8px 24px rgba(34, 31, 27, 0.08);
+
+  /* ── Formes ── */
+  --radius: 0.375rem;
+  --radius-lg: 0.625rem;
+
+  /* ── Typographie ── */
+  --font-display: 'Cormorant Garamond', Georgia, serif;   /* titres */
+  --font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Graisse et interlettrage des titres — une marque à la display
+     géométrique voudra 600 et 0 ; Cormorant Garamond se lit bien à 500 et -0.01em. */
+  --display-weight: 500;
+  --display-tracking: -0.01em;
+
+  /* ── Rôles facultatifs, lus avec repli par le moteur ──
+     Une charte sombre ou en capitales les définit ; les omettre garde le
+     comportement par défaut. Exemple (charte sombre, titres en capitales) :
+       --display-transform: uppercase;  titres en capitales
+       --eyebrow: var(--accent);        sur-titres colorés
+       --sidebar: #000000;              barre latérale de l'administration
+       --text-on-sidebar: #F4F4F4;      (sinon : --inverse / --text-on-inverse) */
+}

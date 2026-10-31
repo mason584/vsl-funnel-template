@@ -1,0 +1,541 @@
+/*
+ * Le questionnaire — une question par écran.
+ *
+ * Aucune couleur en dur : tout vient des variables de `brand/tokens.css`,
+ * pour qu'un changement de marque n'oblige à rien toucher ici.
+ */
+
+.shell {
+  /*
+   * `dvh` et non `vh` : sur iOS, `100vh` compte la barre d'adresse qui se
+   * rétracte, et le bas de l'écran passe sous le pli.
+   */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* ── Barre de progression ── */
+
+.progressTrack {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 3px;
+  width: 100%;
+  background: var(--border-soft);
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+@media (min-width: 640px) {
+  .head {
+    padding: 22px 40px;
+  }
+}
+
+/* ── Scène ── */
+
+.stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 8px 20px 40px;
+  /* Le contenu d'un écran chargé (choix nombreux + précision) doit pouvoir
+     défiler au lieu d'être coupé. */
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .stage {
+    padding: 8px 40px 64px;
+  }
+}
+
+.screen {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.counter {
+  margin: 0 0 14px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  /* Jamais de capitales ici, même pour une marque qui les impose à ses titres :
+     quatorze écrans de question en majuscules fatiguent, et une question n'est
+     pas un titre. */
+  text-transform: none;
+  font-size: clamp(25px, 4.4vw, 40px);
+  line-height: 1.14;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.help {
+  margin: 14px 0 0;
+  max-width: 52ch;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.fields {
+  margin-top: 30px;
+}
+
+/* ── Champs ── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/*
+ * Deux champs empilés respirent ; deux champs côte à côte dans une rangée
+ * doivent rester alignés — sans cette exception, « Nom » descendait de 16 px
+ * sous « Prénom ».
+ */
+.field + .field {
+  margin-top: 16px;
+}
+
+.row .field + .field {
+  margin-top: 0;
+}
+
+@media (max-width: 520px) {
+  /* La rangée s'empile : la respiration redevient nécessaire. */
+  .row .field + .field {
+    margin-top: 16px;
+  }
+}
+
+/* Un champ qui apparaît après coup (le nom, une fois le prénom tapé). */
+.appear {
+  animation: appear 0.22s ease-out;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appear {
+    animation: none;
+  }
+}
+
+.fieldLabel {
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-family: inherit;
+  /* 16 px : en dessous, iOS zoome au focus et casse la mise en page. */
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 0.14s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 520px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+.phoneRow {
+  display: flex;
+  gap: 10px;
+}
+
+.phoneRow .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.dial {
+  flex: none;
+  padding: 13px 10px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 16px;
+}
+
+/* ── Choix ── */
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15.5px;
+  line-height: 1.4;
+  text-align: left;
+  transition:
+    border-color 0.12s,
+    background-color 0.12s,
+    transform 0.08s;
+}
+
+.choice:hover {
+  border-color: var(--accent);
+  background: var(--panel-accent);
+}
+
+.choice:active {
+  transform: scale(0.995);
+}
+
+.choiceSelected {
+  border-color: var(--accent);
+  background: var(--panel-accent);
+}
+
+/* La lettre de raccourci clavier — « A », « B »… */
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  transition:
+    background-color 0.12s,
+    color 0.12s,
+    border-color 0.12s;
+}
+
+.choiceSelected .key {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.choiceText {
+  flex: 1;
+}
+
+.followUp {
+  margin-top: 9px;
+  padding-left: 39px;
+}
+
+@media (max-width: 520px) {
+  .followUp {
+    padding-left: 0;
+  }
+}
+
+/* ── Actions ── */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .hint {
+    display: none;
+  }
+}
+
+.error {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--accent-deep);
+}
+
+.inputError {
+  border-color: var(--accent-deep);
+}
+
+/* ── Navigation haut/bas ── */
+
+.nav {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 4;
+  display: flex;
+  gap: 2px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.navButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--inverse);
+  color: var(--text-on-inverse);
+  transition: opacity 0.12s;
+}
+
+.navButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── Écrans d'ouverture et d'attente ── */
+
+.intro {
+  text-align: left;
+}
+
+.introBody {
+  margin: 16px 0 0;
+  max-width: 48ch;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.sending {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid var(--tan);
+  border-top-color: var(--accent);
+  animation: spin 900ms linear infinite;
+  flex: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Créneaux ── */
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.day {
+  padding: 10px 14px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  transition:
+    border-color 0.12s,
+    background-color 0.12s;
+}
+
+.day:hover,
+.slot:hover {
+  border-color: var(--accent);
+}
+
+.daySelected {
+  border-color: var(--accent);
+  background: var(--panel-accent);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 8px;
+}
+
+.slot {
+  padding: 12px 8px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  transition:
+    border-color 0.12s,
+    background-color 0.12s;
+}
+
+.slotSelected {
+  border-color: var(--accent);
+  background: var(--panel-accent);
+}
+
+.day:disabled,
+.slot:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notice {
+  margin: 0;
+  padding: 22px 18px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Intégré sous la vidéo de la landing ── */
+
+.shellEmbedded {
+  position: relative;
+  min-height: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.shellEmbedded .progressTrack {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.shellEmbedded .head {
+  justify-content: flex-end;
+  padding: 18px 24px 0;
+}
+
+.shellEmbedded .stage {
+  align-items: flex-start;
+  padding: 8px 24px 32px;
+  overflow: visible;
+}
+
+.shellEmbedded .label {
+  font-size: clamp(22px, 3vw, 30px);
+}
+
+.shellEmbedded .fields {
+  margin-top: 22px;
+}
+
+/* La navigation flotte dans la carte, pas dans la page. */
+.navEmbedded {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  .shellEmbedded .head {
+    padding: 16px 18px 0;
+  }
+
+  .shellEmbedded .stage {
+    padding: 8px 18px 64px;
+  }
+
+  .navEmbedded {
+    right: 12px;
+    bottom: 12px;
+  }
+}
